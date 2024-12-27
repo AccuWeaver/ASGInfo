@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Test template for InstanceTypeAZCheck, builds two VPCs from one instance one of which has the Retain property
+
+Resources:
+  # Custom resource to get subset of zones that have the instance type available
+  ASGInfo:
+    Type: Custom::CheckInstanceTypeAvailability
+    Properties:
+      ServiceToken: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:ASGInfo
+      ASG: wp-instance-dev-WebServerAutoScalingGroup-Fu8GrLHvGjrj
+
+Outputs:
+  InstanceIds:
+    Description: The InstaceIds for the instances
+    Value: !Join [ ",", !GetAtt ASGInfo.InstanceIds ]
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceIds'
+
+  PublicIPs:
+    Description: The DNS names for the instances
+    Value: !Join [ ",", !GetAtt ASGInfo.PublicIPs ]
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicIPs'
+

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# This is a simple example of a bootstrap file for a Go Lambda function
+
+# Set the handler function
+HANDLER="ASGInfo"
+
+# Execute the handler
+exec /var/task/$HANDLER
